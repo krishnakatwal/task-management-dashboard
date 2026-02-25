@@ -6,6 +6,7 @@ TaskItem → displays task */
 
 export type TaskStatus = 'pending' | 'in-progress' | 'completed';
 export type TaskPriority = 'low' | 'medium' | 'high';
+export type TaskSort = "dueDate" | "priority" | "status";
  
 //main task structure interface
 export interface Task {
@@ -91,4 +92,6 @@ export interface TaskFilterProps {
     status?: TaskStatus | "";
     priority?: TaskPriority | "";
   }) => void;
+  sortKey?: TaskSort;
+  onSortChange?: (sortKey: TaskSort) => void;
 }

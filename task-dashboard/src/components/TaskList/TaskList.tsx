@@ -7,38 +7,22 @@
 /**TaskListProps is a TypeScript interface
  * that defines what data and functions the TaskList component receives from its parent (usually Dashboard). */
 import type { TaskListProps } from "../../types";
+import TaskItem from "./TaskItem";
 
-function TaskList({ tasks, onStatusChange, onDelete,onEdit }: TaskListProps) {
+function TaskList({ tasks, onStatusChange, onDelete, onEdit }: TaskListProps) {
   if (tasks.length === 0) {
-    return <p>No tasks available.</p>;
+    return <p>No tasks found .</p>;
   }
   return (
     <ul className="space-y-3">
-      {/* list rendering with proper key management */}
       {tasks.map((task) => (
-        <li key={task.id}>
-          <div>
-            <h3 className="font-semibold">{task.title}</h3>
-            <p className="text-sm text-gray-500">Status: {task.status}</p>
-          </div>
-          <div>
-            {/* Handle task status updates */}
-            {task.status !== "completed" && (
-              <button onClick={() => onStatusChange(task.id, "completed")}>
-                Mark Done
-              </button>
-            )}
-            {/* Implement task deletion */}
-            <button onClick={() => onDelete(task.id)}>Delete</button>
-            {/* Edit button */}
-            <button
-              onClick={() => onEdit(task)}
-              className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-            >
-              Edit
-            </button>
-          </div>
-        </li>
+        <TaskItem
+          key={task.id}
+          task={task}
+          onStatusChange={onStatusChange}
+          onDelete={onDelete}
+          onEdit={onEdit}
+        />
       ))}
     </ul>
   );

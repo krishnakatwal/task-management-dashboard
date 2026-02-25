@@ -1,71 +1,37 @@
 import React from "react";
 import type { TaskItemProps, TaskStatus } from "../../types";
 
-function TaskItem({ task, onStatusChange, onDelete,onEdit }: TaskItemProps) {
+function TaskItem({ task, onStatusChange, onDelete, onEdit }: TaskItemProps) {
   //handled dropdown change event
   function handleStatusChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const newStatus = event.target.value as TaskStatus;
-    onStatusChange(task.id, newStatus); //// Call parent handler
+    onStatusChange(task.id, newStatus); // Call parent handler
   }
 
   //handle delete
   function handleDelete() {
     onDelete(task.id); //Call parent delete handler
   }
-  //status based on task status
-  // function getStatusStyle(task: Task) {
-  //   let backgroundColor: string;
 
-  //   if (task.status === "completed") {
-  //     backgroundColor = "bg-green-100  text-green-800 px-2 py-1 rounded-full text-sm font-medium";
-  //   } else if (task.status === "in-progress") {
-  //     backgroundColor = "bg-yellow-100  text-green-800 px-2 py-1 rounded-full text-sm font-medium";
-  //   } else {
-  //     backgroundColor = "red";
-  //   }
-  //   return {
-  //     backgroundColor,
-  //     padding: "10px",
-  //     margin: "10px 0",
-  //   };
-  // }
   function getStatusStyle(status: TaskStatus) {
     switch (status) {
       case "completed":
-        return "bg-green-100 text-green-700 border-green-200";
+        return "compltedb";
       case "in-progress":
-        return "bg-blue-100 text-blue-700 border-blue-200";
+        return "";
       default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "";
     }
   }
-
-  //style based on priority
-  // function priorityStyle(task: Task) {
-  //   let color: string;
-
-  //   if (task.priority === "high") {
-  //     color = "text-red-600 font-bold capitalize";
-  //   } else if (task.priority === "medium") {
-  //     color = "text-orange-500 capitalize";
-  //   } else {
-  //     color = "text-green-600 capitalize";
-  //   }
-  //   return {
-  //     color,
-  //     fontWeight: task.priority === "high" ? "bold" : "normal",
-  //     textTransform: "capitalize",
-  //   };
-  // }
 
   function priorityStyle(priority: string) {
     switch (priority) {
       case "high":
-        return "text-red-600 font-bold";
+        return "";
       case "medium":
-        return "text-orange-500 capitalize";
+        return "";
       default:
-        return "text-green-600 capitalize";
+        return "";
     }
   }
 
@@ -79,17 +45,13 @@ function TaskItem({ task, onStatusChange, onDelete,onEdit }: TaskItemProps) {
         </div>
       </div>
 
-      {/* <p>Status: {task.status}</p>
-      <p>Priority: {task.priority}</p>
-      <p>Due Date: {task.dueDate}</p> */}
-
       {/* Styled Status */}
       <div className="flex justify-between items-center mt-2">
         <div className="flex flex-col gap-1">
-          {/* <p>
+          <p>
             Status:
             <span className={getStatusStyle(task.status)}>{task.status}</span>
-          </p> */}
+          </p>
           {/* Styled Priority */}
           <p>
             Priority:
