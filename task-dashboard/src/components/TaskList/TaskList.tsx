@@ -8,13 +8,12 @@
  * that defines what data and functions the TaskList component receives from its parent (usually Dashboard). */
 import type { TaskListProps } from "../../types";
 
-function TaskList({ tasks, onStatusChange, onDelete }: TaskListProps) {
+function TaskList({ tasks, onStatusChange, onDelete,onEdit }: TaskListProps) {
   if (tasks.length === 0) {
     return <p>No tasks available.</p>;
   }
   return (
     <ul className="space-y-3">
-
       {/* list rendering with proper key management */}
       {tasks.map((task) => (
         <li key={task.id}>
@@ -31,6 +30,13 @@ function TaskList({ tasks, onStatusChange, onDelete }: TaskListProps) {
             )}
             {/* Implement task deletion */}
             <button onClick={() => onDelete(task.id)}>Delete</button>
+            {/* Edit button */}
+            <button
+              onClick={() => onEdit(task)}
+              className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+            >
+              Edit
+            </button>
           </div>
         </li>
       ))}

@@ -1,7 +1,7 @@
 import React from "react";
 import type { TaskItemProps, TaskStatus } from "../../types";
 
-function TaskItem({ task, onStatusChange, onDelete }: TaskItemProps) {
+function TaskItem({ task, onStatusChange, onDelete,onEdit }: TaskItemProps) {
   //handled dropdown change event
   function handleStatusChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const newStatus = event.target.value as TaskStatus;
@@ -118,6 +118,12 @@ function TaskItem({ task, onStatusChange, onDelete }: TaskItemProps) {
             className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
           >
             Delete
+          </button>
+          <button
+            onClick={() => onEdit(task)}
+            className="bg-blue-500 text-white px-3 py-1 rounded"
+          >
+            Edit
           </button>
         </div>
       </div>

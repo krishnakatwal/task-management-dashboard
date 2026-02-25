@@ -40,12 +40,16 @@ export interface TaskFormData {
 // TaskForm props
 export interface TaskFormProps {
   onAddTask: (data: TaskFormData) => void;
+  onUpdateTask?: (data: TaskFormData) => void;
+  initialData?: TaskFormData;
+  isEditing?: boolean;
 }
  
 export interface TaskListProps {
   tasks: Task[];
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onDelete: (taskId: string) => void;
+  onEdit: (task: Task) => void; 
 }
 
 // types/index.ts
@@ -53,6 +57,7 @@ export interface TaskItemProps {
   task: Task;
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onDelete: (taskId: string) => void;
+  onEdit: (task: Task) => void;
 }
 
 
@@ -61,6 +66,7 @@ export interface TaskListProps {
   tasks: Task[];
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onDelete: (taskId: string) => void;
+  onEdit: (task: Task) => void;
 }
 //types/index.ts
 // export interface TaskFilterProps {
