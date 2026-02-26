@@ -1,3 +1,34 @@
+                                        Task Dashboard Project
+                                             Overview
+- In this project, I built a task manager application using React and TypeScript. The application allows users to add, edit, delete, filter, sort, and search tasks. It also supports saving tasks in localStorage and importing/exporting tasks as JSON files.    
+
+React and TypeScript Features
+
+ - I used React functional components and hooks such as useState and useEffect to manage the application state and side effects. The state was used to store tasks, filters, sorting options, and form data.
+
+- TypeScript was used to define types and interfaces for tasks, component props, and form data. This helped prevent errors and made the code easier to understand and maintain.
+
+Component Composition and State Management
+
+- The application is divided into small components such as:
+ 
+      TaskForm
+
+      TaskList
+
+      TaskItem
+
+      TaskFilter
+
+      Dashboard
+
+- The main state is stored in the Dashboard component and passed down to child components using props. Child components send data back using callback functions such as onAddTask and onDelete.
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
                                               Reflection Document
                         
                                             Write a reflection addressing:

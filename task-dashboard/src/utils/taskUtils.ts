@@ -18,30 +18,39 @@ export const sortTasks = (tasks: Task[], sortBy: TaskSort): Task[] => {
     }
   });
 };
-
+/**save your app's data to a file and load it back later, much like "Save As" and "Open" in a desktop app.*/
 export const exportTasks = (tasks: Task[]) => {
+  /**Convert JS objects to a string */
   const dataStr = JSON.stringify(tasks, null, 2);
+  /**Create a "Blob" (virtual file) containing the JSON string */
   const blob = new Blob([dataStr], { type: "application/json" });
+  /**Generate a temporary URL pointing to that virtual file
+ */
   const url = URL.createObjectURL(blob);
-
+/** Create a hidden <a> element to trigger the download */
   const link = document.createElement("a");
   link.href = url;
+  /** File name includes current date (e.g., tasks_export_2023-10-27.json) */
   link.download = `tasks_export_${new Date().toISOString().split("T")[0]}.json`;
+
+  /**Simulate a click to start download, then remove the temporary URL from memory*/
   link.click();
   URL.revokeObjectURL(url); // Clean up
 };
-
+/**returns A Promise that resolves with the tasks or rejects if the file is invalid. */
 export const importTasks = (file: File): Promise<Task[]> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
+        /**Convert the file text back into JavaScript objects */
         const tasks = JSON.parse(e.target?.result as string);
         resolve(tasks);
       } catch (err) {
         reject(new Error("Invalid JSON file format"));
       }
     };
+    /** Start reading the file as plain text */
     reader.readAsText(file);
   });
 };

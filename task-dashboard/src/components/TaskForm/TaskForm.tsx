@@ -51,9 +51,10 @@ onAddTask is a function passed from the parent to add a new task. */
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) return; // stop submission if invalid
+    
     // // Simple validation: title is required
     //     if (!formData.title.trim()) {
-    //       setError("Title is required");
+    //       setErrors("Title is required");
     //       return;
     //     }
 
