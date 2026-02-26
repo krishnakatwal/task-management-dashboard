@@ -1,8 +1,12 @@
 import type { Task, TaskSort, TaskFormData, FormErrors } from "../types";
 
 export const sortTasks = (tasks: Task[], sortBy: TaskSort): Task[] => {
+  /** It uses [...tasks] to create a shallow copy, avoiding mutating the original array. */
   return [...tasks].sort((a, b) => {
     switch (sortBy) {
+      /** Sorts chronologically: converts date strings/objects to numeric timestamps
+         Result: Earliest dates appear first */
+         
       case "dueDate":
         return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
       case "priority":
