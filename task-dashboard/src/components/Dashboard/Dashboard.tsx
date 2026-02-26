@@ -14,9 +14,9 @@ import type {
 } from "../../types";
 import TaskFilter from "../TaskFilter/TaskFilter";
 import TaskForm from "../TaskForm/TaskForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskList from "../TaskList/TaskList";
-import sortTasks from "../../utils/taskUtils";
+import { sortTasks, importTasks, exportTasks } from "../../utils/taskUtils";
 
 export function Dashboard() {
   //state management
@@ -30,9 +30,38 @@ export function Dashboard() {
     priority: "" as "" | TaskPriority,
   });
   const [sortKey, setSortKey] = useState<TaskSort>("dueDate"); // default sort
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      try {
+        const imported = await importTasks(e.target.files[0]);
+        setTasks((prev) => [...prev, ...imported]);
+      } catch (err) {
+        alert("Failed to import tasks. Check file format.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+
+  // Load tasks from localStorage
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) setTasks(JSON.parse(storedTasks));
+  }, []);
+
+  // Save tasks to localStorage whenever tasks state changes
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   //Handlers
-
   //add edit hanndler
   const handleEdit = (task: Task) => {
     setEditingTask(task);
@@ -87,9 +116,21 @@ export function Dashboard() {
   };
 
   // Apply filters to tasks
+  // const filteredTasks = tasks.filter((task) => {
+  //   if (filters.status && task.status !== filters.status) return false;
+  //   if (filters.priority && task.priority !== filters.priority) return false;
+  //   return true;
+  // });
+
   const filteredTasks = tasks.filter((task) => {
     if (filters.status && task.status !== filters.status) return false;
     if (filters.priority && task.priority !== filters.priority) return false;
+    if (
+      searchQuery &&
+      !task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      !task.description.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+      return false;
     return true;
   });
 
@@ -102,6 +143,23 @@ export function Dashboard() {
       {/* Implement task addition */}
       {/* <TaskForm onAddTask={handleAddTask} /> */}
       {/* Task Form for add/edit */}
+      <div>
+        <button
+          onClick={() => exportTasks(tasks)}
+          className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+        >
+          Export Data
+        </button>
+        <label className="text-sm px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md cursor-pointer hover:bg-indigo-100 transition-colors">
+          Import JSON
+          <input
+            type="file"
+            accept=".json"
+            onChange={handleImport}
+            className="hidden"
+          />
+        </label>
+      </div>
       <TaskForm
         onAddTask={handleAddTask}
         onUpdateTask={handleUpdateTask}
@@ -125,6 +183,17 @@ export function Dashboard() {
         <option value="priority">Priority</option>
         <option value="status">Status</option>
       </select>
+
+      {/* Search Bar */}
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+      </div>
 
       {/* Task List */}
       <TaskList

@@ -95,3 +95,8 @@ export interface TaskFilterProps {
   sortKey?: TaskSort;
   onSortChange?: (sortKey: TaskSort) => void;
 }
+export interface FormErrors {
+  title?: string;
+  description?: string;
+  dueDate?: string;
+}

@@ -8,12 +8,13 @@ id: string,
 
 import { useEffect } from "react";
 import React, { useState } from "react";
-import type { TaskFormProps, TaskFormData } from "../../types";
+import type { TaskFormProps, TaskFormData, FormErrors } from "../../types";
+import { validateTaskForm } from "../../utils/taskUtils";
 
 const initiastate: TaskFormData = {
   title: "",
   description: "",
-  priority: "low",//default priority
+  priority: "low", //default priority
   dueDate: "",
 };
 function TaskForm({
@@ -27,7 +28,7 @@ function TaskForm({
   const [formData, setFormData] = useState<TaskFormData>(initiastate);
 
   //Validation error state
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<FormErrors>({});
 
   // Whenever initialData or isEditing changes, populate the form
   useEffect(() => {
@@ -44,12 +45,17 @@ onAddTask is a function passed from the parent to add a new task. */
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // Handle Form Submission
-    e.preventDefault();// Prevent page refresh
-// Simple validation: title is required
-    if (!formData.title.trim()) {
-      setError("Title is required");
-      return;
-    }
+    e.preventDefault(); // Prevent page refresh
+
+    const validationErrors = validateTaskForm(formData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) return; // stop submission if invalid
+    // // Simple validation: title is required
+    //     if (!formData.title.trim()) {
+    //       setError("Title is required");
+    //       return;
+    //     }
 
     // Handle either update or add
     if (isEditing && onUpdateTask) {
@@ -61,7 +67,7 @@ onAddTask is a function passed from the parent to add a new task. */
     }
     // Reset form and clear errors
     setFormData(initiastate);
-    setError("");
+    setErrors({});
   };
 
   return (
@@ -70,7 +76,7 @@ onAddTask is a function passed from the parent to add a new task. */
       onSubmit={handleSubmit}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Task Title Input */}
+        {/* Task Title Input */}
         <input
           className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           type="text"
@@ -78,9 +84,9 @@ onAddTask is a function passed from the parent to add a new task. */
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
         />
-        {error && <p className="text-red-500">{error}</p>}
+        {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
 
-          {/* Task Description */}
+        {/* Task Description */}
         <textarea
           className="border p-2 rounded md:col-span-2"
           placeholder="Description"
@@ -89,7 +95,10 @@ onAddTask is a function passed from the parent to add a new task. */
             setFormData({ ...formData, description: e.target.value })
           }
         />
-          {/* Due Date */}
+        {errors.description && (
+          <p className="text-red-500 text-sm">{errors.description}</p>
+        )}
+        {/* Due Date */}
         <input
           className="border p-2 rounded"
           type="date"
@@ -98,7 +107,10 @@ onAddTask is a function passed from the parent to add a new task. */
             setFormData({ ...formData, dueDate: e.target.value })
           }
         />
-         {/* Priority Dropdown */}
+        {errors.dueDate && (
+          <p className="text-red-500 text-sm">{errors.dueDate}</p>
+        )}
+        {/* Priority Dropdown */}
         <select
           className="border p-2 rounded"
           value={formData.priority}
@@ -115,8 +127,11 @@ onAddTask is a function passed from the parent to add a new task. */
           className="w-full py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors"
           type="submit"
         >
-          {isEditing ? "Update Task" : "Add Task"} {/* Show correct text based on mode */}
+          {isEditing ? "Update Task" : "Add Task"}{" "}
+          {/* Show correct text based on mode */}
         </button>
+
+        <div className="mb-4"></div>
       </div>
     </form>
   );
