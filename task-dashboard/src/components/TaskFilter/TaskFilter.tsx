@@ -28,6 +28,10 @@ function TaskFilter({ filters, onFilterChange,sortKey,onSortChange }: TaskFilter
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
+
+       {/* Active Filter Indicators */}
+      <div className="flex gap-2 flex-wrap"></div>
+      
        {/* Sort Dropdown */}
        {onSortChange && sortKey && (
         <select
